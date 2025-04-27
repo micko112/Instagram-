@@ -81,13 +81,14 @@ let showCreatePost = ref(false);
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 h-full overflow-auto pt-0 md:pt-0 xl:pl-[0px] lg:pl-[90px]">
-            <div class="mx-auto md:pt-6 pt-20" :class="$page.url==='/' ? 'lg:w-3/12  w-full' : 'max-w-[1200px]'">
+        <div class="flex-1 h-full overflow-auto pt-0 md:pt-0 pl-4 xl:pl-12">
+F
+        <div class="mx-auto md:pt-6 pt-20" :class="$page.url==='/' ? 'lg:w-6/12 w-full mr-auto ' : 'max-w-[1200px]'">
                 <slot />
             </div>
-
+        </div>
             <!-- Suggestions Section -->
-            <div v-if="$page.url==='/'" id="SuggestionsSection" class="lg:w-4/12 lg:block hidden fixed right-0 top-0 h-full text-black mt-10 border-l border-gray-200 pl-4">
+            <div v-if="$page.url==='/'" id="SuggestionsSection" class="lg:w-[35%] lg:block hidden fixed right-0 top-0 h-full text-black mt-14 pl-16">
                 <Link href="/" class="flex items-center justify-between max-w-[300px]">
                     <div class="flex items-center ">
                         <img class="rounded-full z-10 w-[58px] h-[58px]" src="https://picsum.photos/id/50/300/320">
@@ -125,7 +126,7 @@ let showCreatePost = ref(false);
                     <div class="text-xs text-gray-400">© 2025 INSTAGRAM FROM META</div>
                 </div>
             </div>
-        </div>
+
         <div id="BottomNavBar" class="px-6 fixed z-30 w-full md:hidden bottom-0 flex items-center justify-between py-4 border-t bg-white border-t-gray-300 ">
 
                 <Link href="/">
@@ -141,6 +142,6 @@ let showCreatePost = ref(false);
             </Link>
         </div>
     </div>
-    ako je showcreatepost = true, zatvori overlay
+<!--    ako je showcreatepost = true, zatvori overlay-->
     <CreatePostOverlay v-if="showCreatePost" @close="$event=>showCreatePost=false"/>
 </template>
