@@ -31,15 +31,11 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
+        <img src="/insta-logo.png" class="mx-auto pt-10 pb-8" width="200">
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+
 
                 <TextInput
                     id="email"
@@ -49,13 +45,14 @@ const submit = () => {
                     required
                     autofocus
                     autocomplete="username"
+                    placeholder="Email"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+
 
                 <TextInput
                     id="password"
@@ -64,36 +61,45 @@ const submit = () => {
                     v-model="form.password"
                     required
                     autocomplete="current-password"
+                    placeholder="Password"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
+            <PrimaryButton
+                class="mt-4"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+            >
+                Log in
+            </PrimaryButton>
+            <div class="flex items-center mt-4">
+                <span class="flex-grow border-t border-gray-400"></span>
+                <span class="mx-2 text-gray-500 text-sm font-semibold">OR</span>
+                <span class="flex-grow border-t border-gray-400"></span>
+            </div>
+            <div class="flex   justify-center pt-4 cursor-pointer">
 
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
+                <div class="text-blue-600">Login with Facebook</div>
+
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="mt-4 flex items-center justify-center">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
+                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     Forgot your password?
                 </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
+            </div>
+            <div class="mt-4 flex items-center justify-center">
+                Don't have an account?
+                <Link
+                    v-if="canResetPassword"
+                    :href="route('register')"
+                    class="rounded-md text-sm text-blue-600 underline pl-2 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Sign up
+                </Link>
             </div>
         </form>
     </GuestLayout>

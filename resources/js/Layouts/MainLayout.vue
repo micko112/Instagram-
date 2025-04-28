@@ -68,9 +68,9 @@ let showCreatePost = ref(false);
                     <MenuItem icon-string="Messages" class="mb-4"/>
                     <MenuItem icon-string="Notification" class="mb-4"/>
                     <MenuItem @click="$event=>showCreatePost =true" icon-string="Create" class="mb-4"/>
-                    <Link href="/">
+                    <a href="/user">
                         <MenuItem icon-string="Profile" class="mb-4"/>
-                    </Link>
+                    </a>
                 </div>
 
                 <!-- Logout -->
@@ -81,9 +81,9 @@ let showCreatePost = ref(false);
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 h-full overflow-auto pt-0 md:pt-0 pl-4 xl:pl-12">
-F
-        <div class="mx-auto md:pt-6 pt-20" :class="$page.url==='/' ? 'lg:w-6/12 w-full mr-auto ' : 'max-w-[1200px]'">
+        <div class="flex-1 h-full overflow-auto pt-0 md:pt-0 pl-4 xl:pl-[280px]">
+
+        <div class="xl:ml-28 lg:mx-auto md:mx-auto md:pt-6 pt-20" :class="$page.url==='/' ? 'lg:w-6/12 w-full mr-auto ' : 'max-w-[1200px]'">
                 <slot />
             </div>
         </div>
@@ -145,3 +145,5 @@ F
 <!--    ako je showcreatepost = true, zatvori overlay-->
     <CreatePostOverlay v-if="showCreatePost" @close="$event=>showCreatePost=false"/>
 </template>
+
+

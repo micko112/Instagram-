@@ -10,6 +10,16 @@ Route::get('/', function () {
 
     ]);
 });
+Route::get('/user', function () {
+    return Inertia::render('User', [
+
+    ]);
+});
+Route::get('/duplikat', function () {
+    return Inertia::render('Duplikat', [
+
+    ]);
+});
 
 
 Route::middleware('auth')->group(function () {

@@ -22,68 +22,79 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+
+        <img src="/insta-logo.png" class="mx-auto pt-10 pb-8" width="200">
+        <div class="flex text-center font-extrabold text-gray-500">
+            Sign up to see photos and videos from your friends.
+        </div>
+
+        <PrimaryButton
+            class="mt-4"
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+        >
+            Log in with Facebook
+        </PrimaryButton>
+
+        <div class="flex items-center py-3">
+            <span class="flex-grow text-gray-400 border-t border-t-gray-500"></span>
+            <span class="text-gray-400 px-3" >OR</span>
+            <span class="flex-grow text-gray-400 border-t border-t-gray-500"></span>
+        </div>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
-
                 <TextInput
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full bg-gray-50 text-sm "
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
+                    placeholder="Mobile Number or Email"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full bg-gray-50 text-sm"
                     v-model="form.email"
                     required
                     autocomplete="username"
+                    placeholder="Full Name"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full bg-gray-50  text-sm "
                     v-model="form.password"
                     required
                     autocomplete="new-password"
+                    placeholder="Password"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
                 <TextInput
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full bg-gray-50 text-sm"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    placeholder="Password Confirm"
                 />
 
                 <InputError
@@ -91,23 +102,25 @@ const submit = () => {
                     :message="form.errors.password_confirmation"
                 />
             </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
+            <PrimaryButton
+                class="mt-4"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+            >
+                Sign up
+            </PrimaryButton>
+            <div class="text-center text-gray-500 pt-4">
+                By signing up, you agree on Terms, Data Policy and Cookies Policy
             </div>
         </form>
+
+        <!-- Login Link -->
+        <div class="text-center text-sm">
+            Already have an account?
+            <Link :href="route('login')" class="text-blue-500 font-semibold hover:underline">
+                Log in
+            </Link>
+        </div>
     </GuestLayout>
+
 </template>
