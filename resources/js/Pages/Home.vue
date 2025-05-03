@@ -8,6 +8,7 @@ import {Head, Link, router} from '@inertiajs/vue3';
 import { Carousel, Slide, Navigation} from 'vue3-carousel'
 import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue'
 import LikeSection from '@/Components/LikeSection.vue'
+import ShowPostOverlay from "@/Components/ShowPostOverlay.vue";
 let wWidth = ref(window.innerWidth)
 let currentSlide = ref(0)
 let currentPost = ref( null)
@@ -78,14 +79,19 @@ onMounted(() => {
                     <span class="text-black text-[13px] font-extrabold  pl-3 pr-2">Name Here</span>
                     description nigga
                 </div>
-                <button class="text-gray-500 pl-3 text-sm">
+                <button class="text-gray-500 pl-3 text-sm"
+                @click="$event=>openOverlay=true">
                     View all 4 comments
                 </button>
                 <div class="pb-20"></div>
             </div>
         </div>
     </MainLayout>
-
+<ShowPostOverlay
+v-if="openOverlay"
+:post="currentPost"
+@close-overlay="$event=>openOverlay=false"
+/>
 </template>
 <style>
 .carousel__prev,

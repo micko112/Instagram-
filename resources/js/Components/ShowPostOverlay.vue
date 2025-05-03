@@ -1,222 +1,124 @@
 <script setup>
-import {ref, reactive, computed} from 'vue';
-import {router, usePage} from "@inertiajs/vue3";
+import {ref, toRefs} from "vue";
+import {Link, usePage} from "@inertiajs/vue3";
+import ShowPostOptionsOverlay from "@/Components/ShowPostOptionsOverlay.vue";
+import LikeSection from "@/Components/LikeSection.vue";
+import Close from "vue-material-design-icons/Close.vue";
+import DotsHorizontal from "vue-material-design-icons/DotsHorizontal.vue";
+import EmoticonHappyOutLine from "vue-material-design-icons/EmoticonHappyOutLine.vue";
+import HeartOutLine from "vue-material-design-icons/HeartOutLine.vue";
 
-import Photo from 'vue-material-design-icons/ImageMultiple.vue';
-import Close from 'vue-material-design-icons/Close.vue';
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue';
-import MapMarkerOutline from 'vue-material-design-icons/MapMarkerOutline.vue';
-import ChevronDown from 'vue-material-design-icons/ChevronDown.vue';
-import AccountPlusOutline from "vue-material-design-icons/AccountPlusOutline.vue";
+let comment = ref('')
+let deleteType = ref(null)
+let id = ref(null)
 
-// user =usePage().props.auth.user
+const user = usePage().props.auth.user
+const props = defineProps(['post']);
+const {post} = toRefs(props)
 
-const emit = defineEmits(['close'])
-const form = reactive({
-        text: null,
-        file: null
-    }
-)
-const step = ref(1);
-const selectedFile = ref(null);
-const isImage = ref(true);
-const selectedFilter = ref('Original');
-const caption = ref('');
-const createPostFunc = () => {
-    error.value.text = null
-    error.value.file = null
-
-    router.post('/posts', form, {
-        forceFormData: true,
-        preserveScroll: true,
-        onError: errors => {
-            errors && errors.text ? error.value.text = error.text : ''
-            errors && errors.file ? error.value.file = error.file : ''
-        },
-        onSuccess: () => {
-            closeOverlay()
-        }
-    })
-
-
+defineEmits(['CloseOverlay', 'addComment', 'updateLike', 'deleteSelected'])
+const textareaInput = (e) => {
+    textarea.value.style.height = "auto";
+    textarea.value.style.height = `${e.target.scrollHeight}px`;
 }
-const user = {
-    username: '_micko_01',
-    profileImage: 'https://example.com/profile.jpg'
-};
-
-const filters = [
-    'Original', 'Aden', 'Clarendon', 'Crema', 'Gingham',
-    'Juno', 'Lark', 'Ludwig', 'Moon', 'Perpetua', 'Reyes', 'Slumber'
-];
-
-let isValidFile = ref(null)
-let fileDisplay = ref('')
-let textArea = ref('')
-let Error = ref({
-    text: null,
-    file: null
-})
-
-const getUploadedImage = (e) => {
-    form.file = e.target.files[0];
-    const file = e.target.files[0];
-    let extension = file.name.substring(file.name.lastIndexOf('.')+1);
-    // Obradi odabrane fajlove ovde
-    console.log(extension);
-    if (extension == 'png' || extension == 'jpg' || extension == 'jpeg') {
-        isValidFile.value = true
-    } else {
-        isValidFile.value = false
-        return
-    }
-    selectedFile.value=file;
-    isImage.value = file.type.includes('image');
-    fileDisplay.value = URL.createObjectURL(e.target.files[0])
-    setTimeout(()=>{
-        document.getElementById('TextAreaSection').scrollIntoView({behavior: 'smooth'});
-    }, 300);
-    step.value = 2;
-};
-const closeOverlay = () => {
-    form.text=null
-    form.text=null
-    step.value = 1;
-    selectedFile.value = null;
-    fileDisplay.value = '';
-    caption.value = '';
-    emit('close')
-};
-const headerText = computed(() => {
-    return {
-        1: 'Create new post',
-        2: 'Edit',
-        3: 'Create new post'
-    }[step.value];
-});
-const sharePost = () => {
-    // Logic to share the post
-    console.log('Sharing post:', {
-        file: selectedFile.value,
-        filter: selectedFilter.value,
-        caption: caption.value
-    });
-    closeModal();
-};
 </script>
-<style>
-.btn-primary {
-    @apply bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md text-sm transition-colors;
-}
-</style>
 <template>
-    <div id="OverlaySection" class="fixed z-50 top-0 left-0 w-full h-screen bg-[#000000] bg-opacity-60 p-3">
-        <button class="absolute right-3" @click="$event=>closeOverlay()">
-            <Close :size="26" fill-color="FFFFFF"/>
+    <div id="OverlaySection" class="fixed z-50 top-0 left-0 w-full h-full bg-black bg-opacity-50 p-3">
+        <button class="absolute top-3 right-3 " @click="$event=>$emit('CloseOverlay')">
+            <Close :size="27" fill-color="#FFFFFF"/>
         </button>
-        <div class="max-w-4xl h-[calc(100%-80px)] mx-auto mt-14 bg-white rounded-lg   justify-center">
-            <div class="flex  items-center justify-between w-full mx-auto rounded-lg border-b p-3 border-b-gray-300 font-extrabold bg-white">
-                <button v-if="step > 1" @click="step--">
-                    <ArrowLeft :size="24" />
-                </button>
-                <div class="font-semibold text-lg mx-auto">{{ headerText }}</div>
-                <button v-if="step === 3" class="text-blue-500 font-semibold" @click="sharePost">Share</button>
-                <button v-else-if="step === 2 && selectedFile" class="text-blue-500 font-semibold" @click="step++">Next</button>
-
-            </div>
-
-            <!-- Content Area -->
-            <div class="flex-1 w-full md:flex h-[calc(100%-55px)] rounded-xl overflow-auto items-center justify-center">
-
-            <div class="flex  items-center justify-center h-full p-8 text-center">
-                    <div v-if="step === 1" class="flex flex-col items-center mx-auto space-y-4">
-                        <Photo :size="80" />
-                        <div class="text-xl">Drag photos and videos here</div>
-                        <label for="file"
-                               class=" bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md text-sm">
-                            Select from computer
-                        </label>
-                        <input
-                            id="file"
-                            type="file"
-                            class="hidden"
-                            @input="$event=>getUploadedImage($event)"
-                        >
-                        <div v-if="error && error.file" class="text-red-600 text-center p-2 font-extrabold">{{error.file}}</div>
-                        <div v-if="!fileDisplay &&isValidFile===false" class="text-red-600 text-center p-2 font-extrabold">File not accepted</div>
-                        <div v-else class="w-full h-full flex flex-col items-center justify-center p-4 space-y-4">
-                            <img v-if="isValidFile ===true && fileDisplay" class="min-w-[400px]   " :src="fileDisplay">
-
+        <div class="bg-white max-w-6xl h-[calc(100%-100px)] mx-auto  ">
+            <!--            Deo za sliku sa leve strane-->
+            <div class="w-full md:flex h-full overflow-auto">
+                <div class="flex items-center bg-black w-full">
+                    <img class="mx-auto min-w-[400px] p-4" src="https://picsum.photos/id/58/700/800" alt="">
+                </div>
+                <!--                Desni deo posta sa komentarima i ostlaim glupostima-->
+                <div class="w-full relative md:max-w-[500px] ">
+                    <!--                User photo, ime, datum-->
+                    <div class="flex items-center justify-between p-3 border-b ">
+                        <div class="flex items-center">
+                            <img class="rounded-full z-10 w-[58px] h-[58px]" src="https://picsum.photos/id/50/300/320">
+                            <div class="text-black font-extrabold ml-4">Name Here</div>
+                            <div class="flex items-center">
+                                <span class="-mt-5 mx-2 text-[35px] text-gray-400">.</span>
+                                <div class="text-gray-400">Date Here</div>
+                            </div>
                         </div>
+                        <button>
+                            <DotsHorizontal class="cursor-pointer" :size="26"/>
+                        </button>
                     </div>
-                    <!-- Step 2: Edit -->
-                    <div v-if="step === 2" class="flex h-full">
-                        <div class="w-3/4 border-r border-gray-300 flex items-center justify-center ">
-                            <img v-if="selectedFile && isImage" :src="fileDisplay" class="max-h-full max-w-full object-contain"/>
-                            <video v-else-if="selectedFile" :src="fileDisplay" controls class="max-h-full max-w-full"></video>
-                        </div>
-                        <div class="w-1/4 p-4 overflow-y-auto">
-                            <div class="font-semibold mb-4">Filters</div>
-                            <div class="grid grid-cols-3 gap-2 mb-6">
-                                <button v-for="filter in filters" :key="filter"
-                                        class="h-16 w-full flex items-center justify-center"
-                                        @click="selectedFilter = filter">
-                                    <div class="text-xs">{{ filter }}</div>
-                                </button>
+                    <!--                    Komentar ili opis osobe koja pravi post-->
+                    <div class="">
+                        <div class="flex items-center justify-between p-3 ">
+                            <div class="flex items-center">
+                                <img class="rounded-full z-10 w-[45px] h-[45px]"
+                                     src="https://picsum.photos/id/50/300/320">
+                                <div class="flex flex-col ml-4">
+                                    <div class="flex items-center">
+                                        <div class="text-black font-extrabold  text-sm">Name Here</div>
+                                        <div class="text-sm text-gray-900 ml-3.5">
+                                            Commentar bas mi smrde noge
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 flex items-center gap-3">
+                                        <div>1w</div>
+                                        <div>12 likes</div>
+                                        <Button>Reply</Button>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="font-semibold mb-4">Adjustments</div>
-                            <!-- Adjustment controls would go here -->
+                            <button>
+                                <HeartOutLine class="cursor-pointer" :size="20" fill-color="#8d9399"/>
+                            </button>
                         </div>
+                        <!--   Obican Komentar osobe koja komentarise-->
+                        <div class="flex items-center justify-between p-3 ">
+                            <div class="flex items-center">
+                                <img class="rounded-full z-10 w-[45px] h-[45px]"
+                                     src="https://picsum.photos/id/50/300/320">
+                                <div class="flex flex-col ml-4">
+                                    <div class="flex items-center">
+                                        <div class="text-black font-extrabold  text-sm">Name Here</div>
+                                        <div class="text-sm text-gray-900 ml-3.5">
+                                            Commentar bas mi smrde noge
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 flex items-center gap-3">
+                                        <div>1w</div>
+                                        <div>12 likes</div>
+                                        <Button>Reply</Button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button>
+                                <HeartOutLine class="cursor-pointer" :size="20" fill-color="#8d9399"/>
+                            </button>
+                        </div>
+                        <div class="pb-80 "></div>
                     </div>
-
-                    <!-- Step 3: Details -->
-                    <div v-if="step === 3" class="flex h-full">
-                        <div class="w-3/4 border-r border-gray-300 flex items-center justify-center ">
-                            <img v-if="selectedFile && isImage" :src="fileDisplay" class="max-h-full max-w-full object-contain"/>
-                            <video v-else-if="selectedFile" :src="fileDisplay" controls class="max-h-full max-w-full"></video>
-                        </div>
-                        <div class="w-1/4 p-4 overflow-y-auto">
-                            <div class="flex items-center mb-4">
-                                <img :src="user.profileImage" class="w-8 h-8 rounded-full mr-2"/>
-                                <span class="font-semibold">{{ user.username }}</span>
-                            </div>
-
-                            <textarea
-                                v-model="caption"
-                                placeholder="Write a caption..."
-                                class="w-full border-b border-gray-300 pb-2 mb-4 focus:outline-none"
-                                rows="3"
-                            ></textarea>
-
-                            <div class="mb-4">
-                                <div class="flex items-center text-gray-500 mb-2">
-                                    <MapMarkerOutline :size="18" class="mr-2"/>
-                                    <span>Add location</span>
-                                </div>
-                                <div class="flex items-center text-gray-500">
-                                    <AccountPlusOutline :size="18" class="mr-2"/>
-                                    <span>Add collaborators</span>
-                                </div>
-                            </div>
-
-                            <div class="border-t border-gray-300 pt-4">
-                                <div class="font-semibold mb-2">Share to</div>
-                                <div class="flex items-center mb-2">
-                                    <input type="checkbox" id="facebook" class="mr-2">
-                                    <label for="facebook">Facebook - Friends</label>
-                                </div>
-                            </div>
-
-                            <div class="border-t border-gray-300 pt-4">
-                                <div class="font-semibold mb-2">Accessibility</div>
-                                <div class="font-semibold mb-2">Advanced settings</div>
-                            </div>
-                        </div>
+                    <LikeSection class="px-2 mb-2  "/>
+                    <div class="flex absolute bottom-0  border  w-full max-h-[200px] bg-white overflow-auto">
+                        <EmoticonHappyOutLine class="pl-3 pt-[10px]" :size="30"/>
+                        <textarea
+                        ref="textarea"
+                        :oninput="textareaInput"
+                        v-model="comment"
+                        placeholder="Add a comment..."
+                        rows="1"
+                        class="w-full border-0 mt-2 mb-2 text-sm z-50 focus:ring-0 text-gray-700 text-[18px]">
+                        </textarea>
+                        <button
+                        v-if="comment"
+                        class="text-blue-600 font-extrabold pr-4">
+                            Post
+                        </button>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
+    <ShowPostOptionsOverlay/>
 </template>

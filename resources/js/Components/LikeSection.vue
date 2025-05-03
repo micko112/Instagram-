@@ -17,7 +17,7 @@ const emit =defineEmits(['like'])
 </script>
 
 <template>
-    <div class="flex z-20 items-center justify-between" >
+    <div class="flex z-20 items-center justify-between border-t " >
         <div class="flex items-center ">
             <button class="mt-[10px] pl-3">
                 <HeartOutline class=" cursor-pointer" :size="24"/>
