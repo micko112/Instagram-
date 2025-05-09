@@ -25,7 +25,6 @@ class PostController extends Controller
         $post = new Post();
         $request->validate([
             'file' => 'required|mimes:jpeg,jpg,png,gif',
-            'text' => 'required'
         ]);
         $post = (new FileService)->updateFile($post, $request, 'post');
         $post->user_id = auth()->user()->id;

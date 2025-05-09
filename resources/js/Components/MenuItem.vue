@@ -43,15 +43,15 @@ const iconComponent = iconMap[iconString.value];
         <div class="flex items-center">
             <!-- Profile Image -->
             <img v-if="iconString === 'Profile'"
-                 class="rounded-full ml-[2px] w-[34px] h-[34px] cursor-pointer"
+                 class="rounded-full ml-[2px] w-[27px] h-[27px] cursor-pointer"
                  src="https://picsum.photos/id/50/300/320"
                  alt="Profile">
 
             <!-- Icon -->
-            <component v-else :is="iconComponent" fillColor="#000000" :size="34" />
+            <component v-else :is="iconComponent" fillColor="#000000" :size="27" />
 
             <!-- Text (hidden on mobile) -->
-            <span class="hidden xl:block text-black font-extrabold text-[18px] pl-2 mt-0.5">
+            <span class="hidden xl:block text-black  text-[14px] pl-2 mt-0.5">
                 {{ iconString }}
             </span>
         </div>

@@ -58,19 +58,19 @@ let showCreatePost = ref(false);
                 </Link>
 
                 <!-- Menu Items -->
-                <div class="flex-1 px-4 pt-4">
+                <div class="flex-1 px-4 pt-2">
                     <Link href="/">
-                        <MenuItem icon-string="Home" class="mb-4"/>
+                        <MenuItem icon-string="Home" class="mb-2"/>
                     </Link>
-                    <MenuItem icon-string="Search" class="mb-4"/>
-                    <MenuItem icon-string="Explore" class="mb-4"/>
-                    <MenuItem icon-string="Reels" class="mb-4"/>
-                    <MenuItem icon-string="Messages" class="mb-4"/>
-                    <MenuItem icon-string="Notification" class="mb-4"/>
-                    <MenuItem @click="$event=>showCreatePost =true" icon-string="Create" class="mb-4"/>
-                    <a href="/user">
-                        <MenuItem icon-string="Profile" class="mb-4"/>
-                    </a>
+                    <MenuItem icon-string="Search" class="mb-2"/>
+                    <MenuItem icon-string="Explore" class="mb-2"/>
+                    <MenuItem icon-string="Reels" class="mb-2"/>
+                    <MenuItem icon-string="Messages" class="mb-2"/>
+                    <MenuItem icon-string="Notification" class="mb-2"/>
+                    <MenuItem @click="$event=>showCreatePost =true" icon-string="Create" class="mb-2"/>
+                    <Link href="User">
+                        <MenuItem icon-string="Profile" class="mb-2"/>
+                    </Link>
                 </div>
 
                 <!-- Logout -->
@@ -83,7 +83,7 @@ let showCreatePost = ref(false);
         <!-- Main Content -->
         <div class="flex-1 h-full overflow-auto pt-0 md:pt-0 pl-4 xl:pl-[280px]">
 
-        <div class="xl:ml-28 lg:mx-auto md:mx-auto md:pt-6 pt-20" :class="$page.url==='/' ? 'lg:w-6/12 w-full mr-auto ' : 'max-w-[1200px]'">
+        <div class="xl:ml-28 lg:ml-28 md:mx-2 md:pt-6 pt-20" :class="$page.url==='/' ? 'lg:w-6/12 w-full mr-auto ' : 'max-w-[1200px]'">
                 <slot />
             </div>
         </div>

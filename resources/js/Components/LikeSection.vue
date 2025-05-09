@@ -12,15 +12,25 @@ const props=defineProps(['post'])
 const {post} =toRefs(props)
 const emit =defineEmits(['like'])
 
-//const user =usePage().props.auth.user
-
+const user =usePage().props.auth.user
+const isHeartActiveComputed = computed( ()=>{
+    let isTrue=false
+for (let i =0; i<post.value.likes.length; i++){
+    const element = array[i];
+    if(like.user.id===user.id && like.post.id === post.value.id){
+        isTrue=true;
+    }
+}
+return isTrue
+})
 </script>
 
 <template>
     <div class="flex z-20 items-center justify-between border-t " >
         <div class="flex items-center ">
-            <button class="mt-[10px] pl-3">
-                <HeartOutline class=" cursor-pointer" :size="24"/>
+            <button @click="$event=>$emit('like', {post, user})" class="mt-[10px] pl-3">
+                <HeartOutline v-if="!isHeartActiveComputed" class=" cursor-pointer" :size="24"/>
+                <Heart v-else class="fill-red-600" :size="24"/>
             </button>
             <CommentOutline class="pl-3 pt-[10px] cursor-pointer" :size="24"/>
             <SendOutline class="pl-3 pt-[10px] cursor-pointer" :size="24"/>
