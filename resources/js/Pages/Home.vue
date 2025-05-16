@@ -32,12 +32,12 @@ const addComment=(object)=>{
     )
 }
 const updateLike = (object) =>{
-    let deleteLike =false;
+    let deleteLike =false
     let id=null
     for(let i=0; i< object.post.likes.length; i++){
         const like = object.post.likes[i];
         if(like.user.id ===object.user.id && like.post.id === object.post.id){
-            deleteLike=true;
+            deleteLike=true
             id=like.id
         }
     }
@@ -46,7 +46,7 @@ const updateLike = (object) =>{
             onFinish: ()=> updatedPost(object),
         } )
     }else {
-        router.post('/likes/', {
+        router.post('/likes', {
                post_id: object.post.id,
         }, {
             onFinish: () =>updatedPost(object),
@@ -60,6 +60,21 @@ const updatedPost = (object)=>{
             currentPost.value=post;
         }
     }
+}
+const deleteFunc=(object)=>{
+    let url=''
+    if(object.deleteType==='Post'){
+        url='/posts/'+ object.post.id
+    }if(object.deleteType==='Comment'){
+        url='/comments/'+ object.comment.id
+    }
+
+    router.delete(url, {
+        onFinish: ()=> updatedPost(object),
+    } )
+}
+const deleteComment = (id) => {
+    console.log(id);
 }
 </script>
 

@@ -44,6 +44,19 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
+                <div class="mt-4">
+                    <TextInput
+                        id="email"
+                        type="email"
+                        class="mt-1 block w-full bg-gray-50 text-sm"
+                        v-model="form.email"
+                        required
+                        autocomplete="username"
+                        placeholder="Mobile Number or Email"
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.email" />
+                </div>
                 <TextInput
                     id="name"
                     type="text"
@@ -52,25 +65,13 @@ const submit = () => {
                     required
                     autofocus
                     autocomplete="name"
-                    placeholder="Mobile Number or Email"
+                    placeholder="Full Name"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full bg-gray-50 text-sm"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                    placeholder="Full Name"
-                />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
 
             <div class="mt-4">
                 <TextInput

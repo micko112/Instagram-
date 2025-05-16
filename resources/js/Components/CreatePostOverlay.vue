@@ -11,8 +11,7 @@ import AccountPlusOutline from "vue-material-design-icons/AccountPlusOutline.vue
 import {nextTick} from 'vue';
 
 const captionTextarea = ref(null);
-
-// user =usePage().props.auth.user
+const user =usePage().props.auth.user
 
 const emit = defineEmits(['close'])
 const form = reactive({
@@ -46,10 +45,6 @@ const createPostFunc = () => {
         }
     })
 }
-const user = {
-    username: '_micko_01',
-    profileImage: 'https://example.com/profile.jpg'
-};
 
 const filters = [
     'Original', 'Aden', 'Clarendon', 'Crema', 'Gingham',
@@ -198,8 +193,8 @@ const sharePost = () => {
                         </div>
                         <div class="w-1/4 p-4 overflow-y-auto">
                             <div class="flex items-center mb-4">
-                                <img :src="user.profileImage" class="w-8 h-8 rounded-full mr-2"/>
-                                <span class="font-semibold">{{ user.username }}</span>
+                                <img :src="user.file" class="w-8 h-8 rounded-full mr-2"/>
+                                <span class="font-semibold">{{ user.name }}</span>
                             </div>
 
                             <textarea

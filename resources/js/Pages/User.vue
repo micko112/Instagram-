@@ -11,17 +11,77 @@ import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue';
 import AccountBoxOutline from 'vue-material-design-icons/AccountBoxOutline.vue';
 
 import ContentOverlay from "@/Components/ContentOverlay.vue";
+import ShowPostOverlay from "@/Components/ShowPostOverlay.vue";
+
 let data = reactive({post: null})
 const form = reactive({file: null})
-const props = defineProps({postByUser: Object, user: Object})
-const {postByUser, user} = toRefs(props)
+const props = defineProps({postsByUser: Object, user: Object})
+const {postsByUser, user} = toRefs(props)
 
+const updatedPost = (object) => {
+    for (let i = 0; i < postsByUser.value.data.length; i++) {
+        const post = postsByUser.value.data[i];
+        if (post.id === object.post.id) {
+            data.post = post;
+        }
+    }
+}
+
+const addComment = (object) => {
+    router.post('/comments', {
+            post_id: object.post.id,
+            user_id: object.user.id,
+            comment: object.comment
+        }, {
+            onFinish: () => updatedPost(object),
+        }
+    )
+}
+const deleteFunc = (object) => {
+    let url = ''
+    if (object.deleteType === 'Post') {
+        url = '/posts/' + object.post.id
+        setTimeout(() => {
+            data.post = null
+        }, 100)
+    }
+    if (object.deleteType === 'Comment') {
+        url = '/comments/' + object.comment.id
+    }
+
+    router.delete(url, {
+        onFinish: () => updatedPost(object),
+    })
+}
+const updateLike = (object) => {
+    let deleteLike = false
+    let id = null
+    for (let i = 0; i < object.post.likes.length; i++) {
+        const like = object.post.likes[i];
+        if (like.user.id === object.user.id && like.post.id === object.post.id) {
+            deleteLike = true
+            id = like.id
+        }
+    }
+    if (deleteLike) {
+        router.delete('/likes/' + id, {
+            onFinish: () => updatedPost(object),
+        })
+    } else {
+        router.post('/likes', {
+            post_id: object.post.id,
+        }, {
+            onFinish: () => updatedPost(object),
+        })
+    }
+}
 const getUploadedImage = (e) => {
     form.file = e.target.files[0];
     router.post('/users', form, {
         preserveState: false
     })
 };
+
 </script>
 
 <template>
@@ -34,9 +94,10 @@ const getUploadedImage = (e) => {
                 <!-- Profilna slika -->
                 <label for="fileUser">
                     <img class="w-[100px]  md:w-[170px]  rounded-full object-fit cursor-pointer"
-                         src="https://picsum.photos/id/51/170/170" alt="Profile Picture">
+                         :src="user.file" alt="Profile Picture">
                 </label>
                 <input
+                    v-if="user.id===$page.props.auth.user.id"
                     id="fileUser"
                     class="hidden"
                     type="file"
@@ -45,7 +106,7 @@ const getUploadedImage = (e) => {
                 <!-- Info -->
                 <div class="ml-6 w-full   ">
                     <div class="flex md:flex-row items-center md:mb-8 mb-5 space ">
-                        <div class="md:mr-6 mr-3 rounded-lg text-[18px] font-light">username_here</div>
+                        <div class="md:mr-6 mr-3 rounded-lg text-[18px] font-light">{{ user.name }}</div>
                         <button
                             class=" md:block hidden md:mr-6 p-1 px-4 border rounded-lg  text-sm font-semibold bg-gray-100 hover:bg-gray-200">
                             Edit Profile
@@ -68,13 +129,14 @@ const getUploadedImage = (e) => {
                     <!-- Stats -->
                     <div class="md:block hidden ">
                         <div class="flex items-center text-sm">
-                            <div class="mr-6"><span class="font-semibold">54</span>posts</div>
-                            <div class="mr-6"><span class="font-semibold">834</span>followers</div>
-                            <div class="mr-6"><span class="font-semibold">162</span>following</div>
+                            <div class="mr-6"><span class="font-semibold pr-1">{{ postsByUser.data.length }}</span>posts
+                            </div>
+                            <div class="mr-6 p"><span class="font-semibold pr-1">834</span>followers</div>
+                            <div class="mr-6"><span class="font-semibold pr-1">162</span>following</div>
                         </div>
                     </div>
                     <div class="text-sm">
-                        <div class="font-semibold">Ime i Prezime</div>
+                        <div class="font-semibold">{{ user.name }}</div>
                         <div>Bio tekstić ovde ✌️</div>
                     </div>
                     <!--                    Za manje ekrane-->
@@ -84,7 +146,7 @@ const getUploadedImage = (e) => {
             <div class="md:hidden ">
                 <div class="w-full flex items-center justify-around text-sm border-t border-t-gray-300 mt-8 ">
                     <div class="text-center p-3">
-                        <div class="font-extrabold">3</div>
+                        <div class="font-extrabold">{{ postsByUser.data.length }}</div>
                         <div class="text-gray-400 font-semibold -mt-1.5">posts</div>
                     </div>
                     <div class="text-center p-3">
@@ -124,18 +186,26 @@ const getUploadedImage = (e) => {
             </div>
 
             <div class="grid md:gap-4 gap-1 grid-cols-3 relative">
-                <ContentOverlay/>
-<!--                :postByUser="postByUser"-->
-<!--                @selectedPost="$event=>data.post=$event"-->
-
-
+                <div v-for="post in postsByUser.data" :key="postByUser">
+                    <ContentOverlay
+                    :postByUser="post"
+                    @selectedPost="$event=>data.post=$event"
+                    />
+                </div>
             </div>
-
         </div>
 
 
     </MainLayout>
-
+    <ShowPostOverlay
+        v-if="data.post"
+        :post="data.post"
+        @addComment="$event=>addComment($event)"
+        @updateLike="$event=>updateLike($event)"
+        @deleteSelected="$event=>{deleteFunc($event);
+            openOverlay=false}"
+        @CloseOverlay="$event=>data.post=null"
+    />
 </template>
 <style>
 .carousel__prev,

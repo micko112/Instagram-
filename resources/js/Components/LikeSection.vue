@@ -13,10 +13,11 @@ const {post} =toRefs(props)
 const emit =defineEmits(['like'])
 
 const user =usePage().props.auth.user
+
 const isHeartActiveComputed = computed( ()=>{
     let isTrue=false
 for (let i =0; i<post.value.likes.length; i++){
-    const element = array[i];
+    const element = post.value.likes[i];
     if(like.user.id===user.id && like.post.id === post.value.id){
         isTrue=true;
     }

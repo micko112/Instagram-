@@ -24,6 +24,7 @@ class AllPostsCollection extends ResourceCollection
                      return [
                          'id' => $comment->id,
                          'text' => $comment->text,
+                         'created_at' => $comment->created_at->format('D M Y'),
                          'user' =>[
                              'id' => $comment->user->id,
                              'name' => $comment->user->name,

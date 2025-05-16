@@ -29,7 +29,7 @@ class UserController extends Controller
         ]);
         $user=(new FileService)->updateFile(auth()->user(), $request, 'user');
         $user->save();
-        return redirect()->route('user.show', ['id'=>$user->id] );
+        return redirect()->route('users.show', ['id'=>$user->id] );
     }
 
     /**

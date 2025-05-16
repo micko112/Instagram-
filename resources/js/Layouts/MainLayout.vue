@@ -68,15 +68,15 @@ let showCreatePost = ref(false);
                     <MenuItem icon-string="Messages" class="mb-2"/>
                     <MenuItem icon-string="Notification" class="mb-2"/>
                     <MenuItem @click="$event=>showCreatePost =true" icon-string="Create" class="mb-2"/>
-                    <Link href="User">
+                    <Link :href="route('users.show', {id: $page.props.auth.user.id})">
                         <MenuItem icon-string="Profile" class="mb-2"/>
                     </Link>
                 </div>
 
                 <!-- Logout -->
-                <div class="px-4 pb-4">
-                    <MenuItem icon-string="Log out"/>
-                </div>
+                <Link :href="route('logout')"  method="POST" class="px-4 pb-4">
+                    <MenuItem  icon-string="Log out"/>
+                </Link>
             </div>
         </div>
 
@@ -88,13 +88,14 @@ let showCreatePost = ref(false);
             </div>
         </div>
             <!-- Suggestions Section -->
+<!--        tvoj profil itd-->
             <div v-if="$page.url==='/'" id="SuggestionsSection" class="lg:w-[35%] lg:block hidden fixed right-0 top-0 h-full text-black mt-14 pl-16">
-                <Link href="/" class="flex items-center justify-between max-w-[300px]">
+                <Link :href="route('users.show', {id: $page.props.auth.user.id})" class="flex items-center justify-between max-w-[300px]">
                     <div class="flex items-center ">
-                        <img class="rounded-full z-10 w-[58px] h-[58px]" src="https://picsum.photos/id/50/300/320">
+                        <img class="rounded-full z-10 w-[58px] h-[58px]" :src="$page.props.auth.user.file">
                         <div class="pl-4">
-                            <div class="text-black font-extrabold">NAME HERE</div>
-                            <div class="text-gray-500 font-extrabold text-sm">NAME HERE</div>
+                            <div class="text-black font-extrabold">{{ $page.props.auth.user.name }}</div>
+                            <div class="text-gray-500 font-extrabold text-sm">{{ $page.props.auth.user.name }}</div>
                         </div>
                     </div>
                     <button class="text-blue-500 hover:text-gray-900 text-sm font-extrabold">
@@ -107,18 +108,21 @@ let showCreatePost = ref(false);
                     </div>
                     <div class="text-black text-xs">Show all</div>
                 </div>
-                <Link href="/" class="flex items-center justify-between max-w-[300px]">
-                    <div class="flex items-center ">
-                        <img class="rounded-full z-10 w-[58px] h-[58px]" src="https://picsum.photos/id/50/300/320">
-                        <div class="pl-4">
-                            <div class="text-black font-extrabold">NAME HERE</div>
-                            <div class="text-gray-500 font-extrabold text-xs">Followed by</div>
+<!--                Ovo je suggested for you-->
+                <div v-for="randUser in $page.props.randomUsers" :key="randUser"   >
+                    <Link :href="route('users.show', {id: randUser.id})  "class="flex items-center justify-between max-w-[300px]">
+                        <div class="flex items-center ">
+                            <img class="rounded-full z-10 w-[58px] h-[58px]" :src="randUser.file">
+                            <div class="pl-4">
+                                <div class="text-black font-extrabold">{{ randUser.name }}</div>
+                                <div class="text-gray-500 font-extrabold text-xs">Followed by</div>
+                            </div>
                         </div>
-                    </div>
-                    <button class="text-blue-500 hover:text-gray-900 text-sm font-extrabold">
-                        Follow
-                    </button>
-                </Link>
+                        <button class="text-blue-500 hover:text-gray-900 text-sm font-extrabold">
+                            Follow
+                        </button>
+                    </Link>
+                </div>
                 <div class="max-w-[300px] mt-5">
                     <div class="text-xs text-gray-400">Информације Помоћ Штампа API Послови Приватност Услови коришћења Локације Језик Meta Verified</div>
                 </div>
@@ -137,8 +141,8 @@ let showCreatePost = ref(false);
             <Reels fill-color="#00000" :size="33" class="cursor-pointer"/>
             <Plus @click="$event=>showCreatePost=true" fill-color="#00000" :size="33" class="cursor-pointer"/>
             <SendOutLine fill-color="#00000" :size="33" class="cursor-pointer"/>
-            <Link href="/">
-                <img class="rounded-full z-10 w-[33px] h-[33px]" src="https://picsum.photos/id/50/300/320">
+            <Link :href="route('users.show', {id: $page.props.auth.user.id})">
+                <img class="rounded-full z-10 w-[33px] h-[33px]" :src="$page.props.auth.user.file">
             </Link>
         </div>
     </div>

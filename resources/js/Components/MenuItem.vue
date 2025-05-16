@@ -18,7 +18,7 @@ import Reels from 'vue-material-design-icons/MoviePlayOutline.vue';
 const props = defineProps({iconString: String})
 const {iconString} = toRefs(props)
 
-//const user = usePage().props.auth.user
+const user = usePage().props.auth.user
 
 
 const iconMap = {
@@ -44,7 +44,7 @@ const iconComponent = iconMap[iconString.value];
             <!-- Profile Image -->
             <img v-if="iconString === 'Profile'"
                  class="rounded-full ml-[2px] w-[27px] h-[27px] cursor-pointer"
-                 src="https://picsum.photos/id/50/300/320"
+                 :src="user.file"
                  alt="Profile">
 
             <!-- Icon -->

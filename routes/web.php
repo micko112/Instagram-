@@ -15,7 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-    Route::get('/users', [UserController::class, 'update'])->name('users.update');
+    Route::post('/users', [UserController::class, 'update'])->name('users.update');
 
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
